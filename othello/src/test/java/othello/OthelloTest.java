@@ -82,10 +82,11 @@ public class OthelloTest {
 	@Test
 	public void checkSwitchPositions(){
 		Othello othelloGame = new Othello();
-		
 		Position pos = new Position(3, 2);
-		assertTrue( othelloGame.move(pos) == 0);
 		
+		assertEquals( Player.PLAYERO.getColor(), othelloGame.getBoardPosition( new Position(3, 3) ));		
+		
+		assertTrue( othelloGame.move(pos) == 0);		
 		assertEquals( Player.PLAYERX.getColor(), othelloGame.getBoardPosition( new Position(3, 3) ));
 	}
 }

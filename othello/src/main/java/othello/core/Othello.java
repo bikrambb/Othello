@@ -7,6 +7,12 @@ import static othello.core.Player.PLAYERX;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents Othello game logic
+ * 
+ * @author bikram
+ *
+ */
 public class Othello {
 
 	private Player _currentPlayer = Player.PLAYERX;
@@ -17,44 +23,6 @@ public class Othello {
 
 	public Othello() {
 		_board = new Board();
-		//checkBoardState();
-	}
-
-	public void checkBoardState() {
-		if (!isMovePossible(PLAYERX)) {
-			if (!isMovePossible(PLAYERO)) {
-				_isGameInProgress = false;
-			} else {
-				_currentPlayer = PLAYERO;
-			}
-		}
-	}
-
-	public boolean isMovePossible(Player player) {
-		return getPossibleMoves(player).size() > 0;
-	}
-
-	public List<Position> getPossibleMoves(Player player) {
-		if (!_isGameInProgress) {
-			throw new IllegalStateException("Game is not in progress");
-		}
-
-		List<Position> possibleMoves = new ArrayList<Position>();
-		Position pos = null;
-		for (int x = 0; x < SIZE; x++) {
-			for (int y = 0; y < SIZE; y++) {
-				pos = new Position(x, y);
-				if (isMovePositionValid(pos) && hasSwitchOptions(pos, player) ) {
-					possibleMoves.add(pos);
-				}
-			}
-		}
-
-		return possibleMoves;
-	}
-
-	private boolean hasSwitchOptions(Position pos, Player player) {		
-		return getSwitchOptions(pos, player) > 0;
 	}
 
 	public int move(Position pos) {
@@ -107,6 +75,33 @@ public class Othello {
 			}
 		}
 		return isMovePositionValid;
+	}	
+
+	public boolean isMovePossible(Player player) {
+		return getPossibleMoves(player).size() > 0;
+	}
+
+	public List<Position> getPossibleMoves(Player player) {
+		if (!_isGameInProgress) {
+			throw new IllegalStateException("Game is not in progress");
+		}
+
+		List<Position> possibleMoves = new ArrayList<Position>();
+		Position pos = null;
+		for (int x = 0; x < SIZE; x++) {
+			for (int y = 0; y < SIZE; y++) {
+				pos = new Position(x, y);
+				if (isMovePositionValid(pos) && hasSwitchOptions(pos, player) ) {
+					possibleMoves.add(pos);
+				}
+			}
+		}
+
+		return possibleMoves;
+	}
+
+	private boolean hasSwitchOptions(Position pos, Player player) {		
+		return getSwitchOptions(pos, player) > 0;
 	}
 
 	private boolean isBoardSetAtPosition(Position pos) {
@@ -121,6 +116,16 @@ public class Othello {
 			return _board.getPosition(pos);
 
 		throw new IndexOutOfBoundsException("Position not on board");
+	}
+	
+	private int getSwitchOptions(Position pos, Player player) {
+		int switches = 0;
+
+		for (int[] adjPosition : ADJ_POSITIONS) {
+			switches += noOfSwitches(pos, player, adjPosition[0], adjPosition[1]);
+		}
+
+		return switches;
 	}
 
 	private int noOfSwitches(Position pos, Player player, int adjRow, int adjCol) {
@@ -146,16 +151,6 @@ public class Othello {
 		return switches;
 	}
 
-	private int getSwitchOptions(Position pos, Player player) {
-		int switches = 0;
-
-		for (int[] adjPosition : ADJ_POSITIONS) {
-			switches += noOfSwitches(pos, player, adjPosition[0], adjPosition[1]);
-		}
-
-		return switches;
-	}
-
 	private void switchPositions(Position pos, Player player, int adjRow, int adjCol) {
 		for (int count = 1;; count++) {
 			if (_board.getPosition(pos.getRow() + count * adjRow, pos.getCol() + count * adjCol) == player.getColor()) {
@@ -165,7 +160,7 @@ public class Othello {
 		}
 	}
 
-	public void setGameOver() {
+	private void setGameOver() {
 		if (!_isGameInProgress) {
 			throw new IllegalStateException("No active game is in progress");
 		}
@@ -173,11 +168,11 @@ public class Othello {
 		_isGameInProgress = false;
 	}
 
-	public void nextPlayer() {
+	private void nextPlayer() {
 		_currentPlayer = _currentPlayer == PLAYERX ? PLAYERO : PLAYERX;
 	}
 
-	public Player otherPlayer() {
+	private Player otherPlayer() {
 		return _currentPlayer == PLAYERX ? PLAYERO : PLAYERX;
 	}
 

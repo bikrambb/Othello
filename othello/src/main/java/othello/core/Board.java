@@ -1,5 +1,11 @@
 package othello.core;
 
+/**
+ * Represents the state of board at any time of game
+ * 
+ * @author bikram
+ *
+ */
 public class Board {
 	public static final int SIZE = 8;
 	public static final char DEFAULT_FIELD = '-';
