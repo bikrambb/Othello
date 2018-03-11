@@ -54,15 +54,15 @@ public class Board {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		for (int x = 0; x < SIZE; x++) {
-			sb.append(x + 1);
+			sb.append(x + 1).append(" ");
 			for (int y = 0; y < SIZE; y++) {
-				sb.append(" ").append(_positions[x][y]);
+				sb.append(_positions[x][y]);
 			}
 			sb.append("\n");
 		}
-		sb.append(" ");
+		sb.append("  ");
 		for (char c : COLS) {
-			sb.append(" ").append(c);
+			sb.append(c);
 		}
 		sb.append("\n");
 		return sb.toString();
